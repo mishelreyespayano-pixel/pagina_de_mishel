@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mishel | Employee Experience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --violet: #2D1B69;
+    --violet-mid: #4A2E9C;
+    --lavender: #C4B5FD;
+    --lavender-light: #EDE9FE;
+    --coral: #FF6B6B;
+    --gold: #F5C842;
+    --white: #FAF9FF;
+    --text: #1A1040;
+    --text-muted: #6B5B95;
+    --glass: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.25);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(45,27,105,0.95);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 30px rgba(45,27,105,0.3);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--lavender); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.3px;
+    position: relative; padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px; background: var(--lavender);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--lavender); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--coral); color: #fff !important;
+    padding: 10px 22px; border-radius: 50px;
+    font-weight: 600 !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,107,0.45); }
+  .nav-cta::after { display: none !important; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 26px; height: 2px;
+    background: white; border-radius: 2px; transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; z-index: 99;
+    background: rgba(45,27,105,0.97); backdrop-filter: blur(20px);
+    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: white; text-decoration: none;
+    font-size: 1.5rem; font-family: 'Playfair Display', serif;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--lavender); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--violet) 0%, #1a0a4a 40%, #3d1f7a 70%, var(--violet-mid) 100%);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 100px 5% 80px;
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(196,181,253,0.15); top: -100px; right: -100px; }
+  .orb-2 { width: 300px; height: 300px; background: rgba(255,107,107,0.12); bottom: -50px; left: 10%; }
+  .orb-3 { width: 200px; height: 200px; background: rgba(245,200,66,0.1); top: 30%; left: 40%; }
+
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    max-width: 1200px; margin: 0 auto; align-items: center; position: relative; z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 50px; padding: 6px 16px; margin-bottom: 1.5rem;
+    color: var(--lavender); font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .eyebrow-dot { width: 6px; height: 6px; background: var(--coral); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--white); margin-bottom: 1.2rem;
+  }
+  .hero-title em { font-style: italic; color: var(--lavender); }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.7); font-size: 1.05rem; line-height: 1.7;
+    max-width: 480px; margin-bottom: 2.5rem;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--coral); color: white; text-decoration: none;
+    padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: 0.95rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(255,107,107,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255,107,107,0.5); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1.5px solid rgba(255,255,255,0.4); color: white; text-decoration: none;
+    padding: 14px 28px; border-radius: 50px; font-weight: 500; font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--lavender); color: var(--lavender); background: rgba(196,181,253,0.08); }
+
+  /* Hero illustration */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+  }
+  .hero-svg-wrap {
+    position: relative; width: 400px; height: 400px;
+  }
+  .hero-svg-wrap svg { width: 100%; height: 100%; }
+
+  /* Floating stats */
+  .stat-card {
+    position: absolute;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px); border-radius: 16px;
+    padding: 14px 20px; color: white;
+  }
+  .stat-card .num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; }
+  .stat-card .label { font-size: 0.72rem; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
+  .stat-1 { top: 10px; left: -20px; animation: float 4s ease-in-out infinite; }
+  .stat-2 { bottom: 30px; right: -10px; animation: float 4s ease-in-out infinite 1.5s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 5%; }
+  .section-tag {
+    display: inline-block; color: var(--violet-mid);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900;
+    color: var(--text); line-height: 1.2; margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px;
+  }
+  .section-head { margin-bottom: 3.5rem; }
+  .max-w { max-width: 1200px; margin: 0 auto; }
+
+  /* ── SERVICES ── */
+  #servicios { background: var(--lavender-light); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .service-card {
+    background: white; border-radius: 24px; padding: 2rem 1.8rem;
+    border: 1.5px solid transparent;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--card-accent, var(--violet));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .service-card:hover { transform: translateY(-6px); border-color: var(--lavender); box-shadow: 0 20px 50px rgba(45,27,105,0.12); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 60px; height: 60px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; margin-bottom: 1.2rem;
+    background: var(--icon-bg, var(--lavender-light));
+  }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 0.6rem; color: var(--text);
+  }
+  .service-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+  .card-tag {
+    display: inline-block; margin-top: 1rem;
+    padding: 4px 12px; border-radius: 50px; font-size: 0.72rem; font-weight: 600;
+    color: var(--tag-color, var(--violet-mid));
+    background: var(--tag-bg, var(--lavender-light));
+  }
+
+  /* ── ABOUT ── */
+  #nosotros {
+    background: white;
+  }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .about-visual { position: relative; }
+  .about-img-wrap {
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-mid) 100%);
+    border-radius: 32px; height: 420px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .about-img-wrap svg { width: 70%; opacity: 0.9; }
+
+  .about-badge {
+    position: absolute; bottom: -20px; left: -20px;
+    background: var(--gold); border-radius: 20px; padding: 20px;
+    text-align: center; box-shadow: 0 8px 30px rgba(245,200,66,0.4);
+  }
+  .about-badge .big { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--violet); display: block; }
+  .about-badge .small { font-size: 0.72rem; font-weight: 700; color: var(--violet); letter-spacing: 0.5px; }
+
+  .values-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .value-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1rem 1.2rem; border-radius: 16px;
+    background: var(--lavender-light); transition: background 0.2s;
+  }
+  .value-item:hover { background: var(--lavender); }
+  .value-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .value-text h4 { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+  .value-text p { font-size: 0.85rem; color: var(--text-muted); }
+
+  /* ── PROCESS ── */
+  #proceso { background: var(--violet); }
+  #proceso .section-tag { color: var(--lavender); }
+  #proceso .section-title { color: white; }
+  #proceso .section-sub { color: rgba(255,255,255,0.6); }
+
+  .process-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem; position: relative;
+  }
+  .step {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 24px; padding: 2rem 1.6rem; color: white; position: relative;
+    backdrop-filter: blur(8px);
+    transition: background 0.3s;
+  }
+  .step:hover { background: rgba(255,255,255,0.18); }
+  .step-num {
+    font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900;
+    color: var(--lavender); opacity: 0.35; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .step h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .step p { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonios { background: var(--lavender-light); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
+  }
+  .testi-card {
+    background: white; border-radius: 24px; padding: 2rem 1.8rem;
+    border: 1.5px solid rgba(196,181,253,0.4);
+    transition: box-shadow 0.3s;
+  }
+  .testi-card:hover { box-shadow: 0 16px 40px rgba(45,27,105,0.1); }
+  .stars { color: var(--gold); font-size: 1rem; letter-spacing: 2px; margin-bottom: 1rem; }
+  .testi-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--lavender));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.9rem;
+  }
+  .author-name { font-weight: 600; font-size: 0.9rem; }
+  .author-role { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ── CONTACT ── */
+  #contacto {
+    background: linear-gradient(135deg, var(--violet) 0%, #1a0a4a 100%);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  #contacto .orb-1 { width: 400px; height: 400px; opacity: 0.2; }
+  #contacto .section-tag { color: var(--lavender); }
+  #contacto .section-title { color: white; }
+  #contacto p { color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.7; max-width: 520px; margin: 0 auto 2.5rem; }
+
+  .contact-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-wa {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: white; text-decoration: none;
+    padding: 15px 32px; border-radius: 50px; font-weight: 600; font-size: 1rem;
+    box-shadow: 0 6px 25px rgba(37,211,102,0.4); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-wa:hover { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(37,211,102,0.55); }
+
+  /* ── SOCIAL LINKS ── */
+  .social-bar {
+    background: white; padding: 2rem 5%;
+    display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .social-bar p { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .social-icon {
+    width: 46px; height: 46px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--lavender-light); text-decoration: none;
+    font-size: 1.2rem; transition: all 0.25s;
+    border: 1.5px solid transparent;
+  }
+  .social-icon:hover { background: var(--violet); transform: translateY(-3px); border-color: var(--lavender); }
+  .social-icon svg { width: 22px; height: 22px; }
+  .social-icon:hover svg path, .social-icon:hover svg rect,
+  .social-icon:hover svg circle, .social-icon:hover svg polygon { fill: white; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text); padding: 3rem 5% 2rem;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900;
+    color: white;
+  }
+  .footer-logo span { color: var(--lavender); }
+  footer p { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+
+  /* ── SCROLL ANIMATION ── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero-sub { margin: 0 auto 2rem; }
+    .hero-btns { justify-content: center; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-visual { display: none; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .hero-title { font-size: 2.2rem; }
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#servicios" onclick="closeMobile()">Servicios</a>
+  <a href="#nosotros" onclick="closeMobile()">Nosotros</a>
+  <a href="#proceso" onclick="closeMobile()">Proceso</a>
+  <a href="#testimonios" onclick="closeMobile()">Testimonios</a>
+  <a href="https://wa.me/51998808598" target="_blank" onclick="closeMobile()" style="color:#25D366">💬 WhatsApp</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo">Mishel<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="https://wa.me/51998808598" target="_blank" class="nav-cta">Contáctanos</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Employee Experience Specialists
+      </div>
+      <h1 class="hero-title">
+        Transformamos <em>personas</em> en el corazón de tu empresa
+      </h1>
+      <p class="hero-sub">
+        En Mishel diseñamos experiencias laborales que despiertan el talento, cultivan el bienestar y construyen culturas donde las personas <strong style="color:white">florecen</strong> — y los negocios también.
+      </p>
+      <div class="hero-btns">
+        <a href="#servicios" class="btn-primary">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 12h15" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Conoce nuestros servicios
+        </a>
+        <a href="https://wa.me/51998808598" target="_blank" class="btn-outline">
+          💬 Hablemos hoy
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-svg-wrap">
+        <!-- Abstract people illustration -->
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background circle -->
+          <circle cx="200" cy="200" r="180" fill="rgba(196,181,253,0.1)" stroke="rgba(196,181,253,0.25)" stroke-width="1.5"/>
+          <!-- Inner circle -->
+          <circle cx="200" cy="200" r="130" fill="rgba(196,181,253,0.08)" stroke="rgba(196,181,253,0.2)" stroke-width="1"/>
+          <!-- Center orb -->
+          <circle cx="200" cy="200" r="60" fill="rgba(196,181,253,0.2)"/>
+          <circle cx="200" cy="200" r="40" fill="rgba(196,181,253,0.35)"/>
+          <text x="200" y="212" text-anchor="middle" font-size="28" fill="white">✦</text>
+          <!-- Person 1 - top -->
+          <circle cx="200" cy="72" r="22" fill="rgba(255,107,107,0.8)"/>
+          <text x="200" y="80" text-anchor="middle" font-size="18" fill="white">🌟</text>
+          <!-- Person 2 - right -->
+          <circle cx="328" cy="200" r="22" fill="rgba(245,200,66,0.8)"/>
+          <text x="328" y="208" text-anchor="middle" font-size="18" fill="white">💡</text>
+          <!-- Person 3 - bottom -->
+          <circle cx="200" cy="328" r="22" fill="rgba(196,181,253,0.9)"/>
+          <text x="200" y="336" text-anchor="middle" font-size="18" fill="white">❤️</text>
+          <!-- Person 4 - left -->
+          <circle cx="72" cy="200" r="22" fill="rgba(100,200,180,0.8)"/>
+          <text x="72" y="208" text-anchor="middle" font-size="18" fill="white">🌿</text>
+          <!-- Person 5 - top-right -->
+          <circle cx="290" cy="110" r="18" fill="rgba(255,107,107,0.5)"/>
+          <text x="290" y="117" text-anchor="middle" font-size="14" fill="white">🎯</text>
+          <!-- Person 6 - bottom-right -->
+          <circle cx="290" cy="290" r="18" fill="rgba(245,200,66,0.5)"/>
+          <text x="290" y="297" text-anchor="middle" font-size="14" fill="white">🏆</text>
+          <!-- Person 7 - bottom-left -->
+          <circle cx="110" cy="290" r="18" fill="rgba(196,181,253,0.6)"/>
+          <text x="110" y="297" text-anchor="middle" font-size="14" fill="white">🤝</text>
+          <!-- Person 8 - top-left -->
+          <circle cx="110" cy="110" r="18" fill="rgba(100,200,180,0.5)"/>
+          <text x="110" y="117" text-anchor="middle" font-size="14" fill="white">✨</text>
+          <!-- Connecting lines -->
+          <line x1="200" y1="94" x2="200" y2="140" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="306" y1="200" x2="260" y2="200" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="200" y1="306" x2="200" y2="260" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="94" y1="200" x2="140" y2="200" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="275" y1="123" x2="242" y2="158" stroke="rgba(196,181,253,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="275" y1="277" x2="242" y2="242" stroke="rgba(196,181,253,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="125" y1="277" x2="158" y2="242" stroke="rgba(196,181,253,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="125" y1="123" x2="158" y2="158" stroke="rgba(196,181,253,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+        <!-- Floating stat cards -->
+        <div class="stat-card stat-1">
+          <div class="num">+200</div>
+          <div class="label">EMPRESAS IMPACTADAS</div>
+        </div>
+        <div class="stat-card stat-2">
+          <div class="num">92%</div>
+          <div class="label">SATISFACCIÓN LABORAL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="max-w">
+    <div class="section-head reveal">
+      <span class="section-tag">Lo que hacemos</span>
+      <h2 class="section-title">Servicios diseñados para<br>experiencias extraordinarias</h2>
+      <p class="section-sub">Cada servicio nace de una convicción: cuando las personas están bien, las organizaciones prosperan.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card reveal" style="--card-accent:#8B5CF6; --icon-bg:#EDE9FE;">
+        <div class="service-icon">🌱</div>
+        <h3>Cultura Organizacional</h3>
+        <p>Construimos culturas sólidas y auténticas, alineadas con el propósito de tu empresa y vividas por cada colaborador.</p>
+        <span class="card-tag" style="--tag-color:#6D28D9;--tag-bg:#EDE9FE;">Diagnóstico · Diseño · Implementación</span>
+      </div>
+
+      <div class="service-card reveal" style="--card-accent:#EC4899; --icon-bg:#FCE7F3;">
+        <div class="service-icon">🚀</div>
+        <h3>Gestión del Talento</h3>
+        <p>Identificamos, desarrollamos y retenemos el talento que tu organización necesita para crecer de manera sostenible.</p>
+        <span class="card-tag" style="--tag-color:#BE185D;--tag-bg:#FCE7F3;">Atracción · Desarrollo · Retención</span>
+      </div>
+
+      <div class="service-card reveal" style="--card-accent:#F59E0B; --icon-bg:#FEF3C7;">
+        <div class="service-icon">💆</div>
+        <h3>Bienestar Integral</h3>
+        <p>Programas holísticos de bienestar físico, mental y emocional que cuidan a tu gente desde adentro hacia afuera.</p>
+        <span class="card-tag" style="--tag-color:#B45309;--tag-bg:#FEF3C7;">Físico · Mental · Emocional</span>
+      </div>
+
+      <div class="service-card reveal" style="--card-accent:#10B981; --icon-bg:#D1FAE5;">
+        <div class="service-icon">😊</div>
+        <h3>Felicidad Laboral</h3>
+        <p>Medimos y potenciamos la satisfacción y alegría en el trabajo, creando ambientes donde las personas disfrutan lo que hacen.</p>
+        <span class="card-tag" style="--tag-color:#065F46;--tag-bg:#D1FAE5;">Medición · Estrategia · Activaciones</span>
+      </div>
+
+      <div class="service-card reveal" style="--card-accent:#3B82F6; --icon-bg:#DBEAFE;">
+        <div class="service-icon">🎓</div>
+        <h3>Formación & Liderazgo</h3>
+        <p>Talleres, workshops y programas de liderazgo que transforman a tus mandos en inspiradores genuinos de sus equipos.</p>
+        <span class="card-tag" style="--tag-color:#1D4ED8;--tag-bg:#DBEAFE;">Workshops · Coaching · Mentoring</span>
+      </div>
+
+      <div class="service-card reveal" style="--card-accent:#FF6B6B; --icon-bg:#FFE4E4;">
+        <div class="service-icon">🔁</div>
+        <h3>Employee Journey</h3>
+        <p>Mapeamos y optimizamos cada etapa del ciclo de vida del colaborador: desde el onboarding hasta el offboarding con propósito.</p>
+        <span class="card-tag" style="--tag-color:#C41E1E;--tag-bg:#FFE4E4;">Onboarding · Ciclo · Experiencia</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="max-w">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-img-wrap">
+          <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="150" cy="150" r="120" fill="rgba(196,181,253,0.1)"/>
+            <!-- Large center person -->
+            <circle cx="150" cy="100" r="35" fill="rgba(245,200,66,0.7)"/>
+            <text x="150" y="112" text-anchor="middle" font-size="30" fill="white">👩</text>
+            <!-- Body -->
+            <rect x="120" y="135" width="60" height="70" rx="20" fill="rgba(196,181,253,0.5)"/>
+            <!-- People around -->
+            <circle cx="60" cy="200" r="24" fill="rgba(255,107,107,0.6)"/>
+            <text x="60" y="210" text-anchor="middle" font-size="20" fill="white">👨</text>
+            <circle cx="240" cy="200" r="24" fill="rgba(100,200,180,0.6)"/>
+            <text x="240" y="210" text-anchor="middle" font-size="20" fill="white">👩</text>
+            <circle cx="150" cy="240" r="22" fill="rgba(196,181,253,0.7)"/>
+            <text x="150" y="249" text-anchor="middle" font-size="18" fill="white">👦</text>
+            <!-- Connection lines -->
+            <line x1="120" y1="175" x2="80" y2="195" stroke="rgba(245,200,66,0.6)" stroke-width="2" stroke-dasharray="4 3"/>
+            <line x1="180" y1="175" x2="218" y2="195" stroke="rgba(245,200,66,0.6)" stroke-width="2" stroke-dasharray="4 3"/>
+            <line x1="150" y1="205" x2="150" y2="220" stroke="rgba(245,200,66,0.6)" stroke-width="2" stroke-dasharray="4 3"/>
+            <!-- Heart icon -->
+            <text x="148" y="68" text-anchor="middle" font-size="14" fill="rgba(255,107,107,0.9)">♥</text>
+          </svg>
+        </div>
+        <div class="about-badge">
+          <span class="big">8+</span>
+          <span class="small">AÑOS DE<br>EXPERIENCIA</span>
+        </div>
+      </div>
+      <div class="about-content reveal">
+        <span class="section-tag">Quiénes somos</span>
+        <h2 class="section-title">Más que consultores,<br>somos aliados de tu gente</h2>
+        <p class="section-sub">Mishel nació de la convicción de que el trabajo puede y debe ser un lugar donde las personas se desarrollen plenamente. Combinamos metodología, empatía y pasión para transformar organizaciones de adentro hacia afuera.</p>
+        <div class="values-list">
+          <div class="value-item">
+            <span class="value-icon">🎯</span>
+            <div class="value-text">
+              <h4>Propósito claro</h4>
+              <p>Cada intervención tiene un objetivo medible y alineado con tu cultura.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">🤝</span>
+            <div class="value-text">
+              <h4>Co-creación</h4>
+              <p>Trabajamos contigo y con tu equipo, nunca para ellos desde afuera.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">📊</span>
+            <div class="value-text">
+              <h4>Resultados medibles</h4>
+              <p>Usamos datos para demostrar el impacto real de cada programa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="proceso">
+  <div class="max-w">
+    <div class="section-head reveal" style="text-align:center">
+      <span class="section-tag">Cómo trabajamos</span>
+      <h2 class="section-title" style="color:white">Un proceso hecho<br>a medida de tu empresa</h2>
+      <p class="section-sub" style="margin:0 auto; color:rgba(255,255,255,0.6)">No hay dos organizaciones iguales. Por eso nuestro proceso se adapta a tu realidad, tamaño y objetivos.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <h3>Diagnóstico Profundo</h3>
+        <p>Escuchamos a tu gente. Encuestas, entrevistas y talleres para entender la realidad de tu organización hoy.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <h3>Diseño Estratégico</h3>
+        <p>Creamos una ruta personalizada con acciones específicas, tiempos y responsables claros.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <h3>Implementación Ágil</h3>
+        <p>Ejecutamos los programas con metodologías ágiles, iterando y ajustando en tiempo real.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <h3>Medición & Evolución</h3>
+        <p>Medimos el impacto, celebramos los logros y evolucionamos continuamente la experiencia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios">
+  <div class="max-w">
+    <div class="section-head reveal" style="text-align:center">
+      <span class="section-tag">Lo dicen ellos</span>
+      <h2 class="section-title">Historias de transformación real</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Mishel transformó completamente nuestra cultura. Pasamos de un ambiente tenso a un equipo que genuinamente disfruta trabajar junto. El impacto fue inmediato y duradero."</p>
+        <div class="testi-author">
+          <div class="author-avatar">MR</div>
+          <div>
+            <div class="author-name">María Rodríguez</div>
+            <div class="author-role">Gerente RRHH · Empresa Retail</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"El programa de bienestar redujo nuestro ausentismo en un 35% en solo 6 meses. Pero más allá de los números, la gente llegó a ser más feliz. Eso no tiene precio."</p>
+        <div class="testi-author">
+          <div class="author-avatar">CP</div>
+          <div>
+            <div class="author-name">Carlos Paredes</div>
+            <div class="author-role">CEO · Empresa Tecnológica</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"La forma en que Mishel co-crea con el equipo es única. No nos dieron soluciones genéricas — nos ayudaron a descubrir las nuestras. Eso es lo que hace la diferencia."</p>
+        <div class="testi-author">
+          <div class="author-avatar">LV</div>
+          <div>
+            <div class="author-name">Lucía Vargas</div>
+            <div class="author-role">Directora de Talento · Banca</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="orb orb-1"></div>
+  <div class="max-w" style="position:relative;z-index:1;text-align:center">
+    <span class="section-tag reveal">Empieza hoy</span>
+    <h2 class="section-title reveal">¿Lista tu empresa para vivir<br>una experiencia diferente?</h2>
+    <p class="reveal">Conversemos sin compromiso. Cuéntanos tu desafío y juntos encontramos el camino hacia una cultura donde tu gente florezca.</p>
+    <div class="contact-btns reveal">
+      <a href="https://wa.me/51998808598?text=Hola%20Mishel!%20Me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios%20de%20Employee%20Experience." target="_blank" class="btn-wa">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribirnos por WhatsApp
+      </a>
+      <a href="mailto:contacto@mishel.pe" class="btn-outline" style="border-color:rgba(255,255,255,0.35)">
+        ✉️ Enviar un correo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL BAR -->
+<div class="social-bar">
+  <p>SÍGUENOS:</p>
+  <!-- LinkedIn -->
+  <a href="https://linkedin.com" target="_blank" class="social-icon" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" stroke="#2D1B69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="4" r="2" stroke="#2D1B69" stroke-width="1.8"/></svg>
+  </a>
+  <!-- Instagram -->
+  <a href="https://instagram.com" target="_blank" class="social-icon" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#2D1B69" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#2D1B69" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1" fill="#2D1B69"/></svg>
+  </a>
+  <!-- Facebook -->
+  <a href="https://facebook.com" target="_blank" class="social-icon" aria-label="Facebook">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="#2D1B69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <!-- WhatsApp -->
+  <a href="https://wa.me/51998808598" target="_blank" class="social-icon" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="#2D1B69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <!-- TikTok -->
+  <a href="https://tiktok.com" target="_blank" class="social-icon" aria-label="TikTok">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5" stroke="#2D1B69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <!-- YouTube -->
+  <a href="https://youtube.com" target="_blank" class="social-icon" aria-label="YouTube">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" stroke="#2D1B69" stroke-width="1.8"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" stroke="#2D1B69" stroke-width="1.8" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mishel<span>.</span></div>
+  <p>© 2025 Mishel Employee Experience. Todos los derechos reservados.</p>
+  <p style="color:rgba(255,255,255,0.3); font-size:0.78rem">📍 Lima, Perú &nbsp;|&nbsp; 📞 +51 998 808 598</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // Hamburger
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMobile() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
