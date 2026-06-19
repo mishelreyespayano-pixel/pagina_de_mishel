@@ -1,231 +1,360 @@
-Esta es una propuesta de página web profesional, moderna y elegante para tu
-marca personal "Mishel". He diseñado una estructura de "Landing Page" (página
-única) que es la tendencia actual para profesionales, facilitando la
-navegación.
-
-He utilizado HTML5, CSS3 (con Tailwind para un diseño moderno) y FontAwesome
-para los iconos de redes sociales.
-
-Instrucciones:
-
-1.  Copia el código de abajo.
-2.  Guárdalo en un bloc de notas como index.html.
-3.  Ábrelo en cualquier navegador.
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mishel | Bienestar y Employee Experience</title>
-    <!-- Tailwind CSS para diseño moderno -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
-        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .service-card:hover { transform: translateY(-10px); transition: all 0.3s ease; }
-        .float-whatsapp {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25d366;
-            color: white;
-            border-radius: 50px;
-            padding: 15px 25px;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mishel | Employee Experience & Bienestar</title>
 
-    <!-- Menú de Navegación -->
-    <nav class="glass fixed w-full z-50 shadow-sm">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0">
-                    <span class="text-2xl font-bold text-indigo-600">Mishel</span>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#inicio" class="text-gray-700 hover:text-indigo-600 px-3 py-2 font-medium">Inicio</a>
-                        <a href="#servicios" class="text-gray-700 hover:text-indigo-600 px-3 py-2 font-medium">Servicios</a>
-                        <a href="#experiencia" class="text-gray-700 hover:text-indigo-600 px-3 py-2 font-medium">Employee Experience</a>
-                        <a href="#contacto" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition">Contáctame</a>
-                    </div>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white px-4 pt-2 pb-4 shadow-lg">
-            <a href="#inicio" class="block text-gray-700 py-2">Inicio</a>
-            <a href="#servicios" class="block text-gray-700 py-2">Servicios</a>
-            <a href="#contacto" class="block text-gray-700 py-2">Contacto</a>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f8fafc;
+    color:#333;
+}
+
+header{
+    position:fixed;
+    width:100%;
+    top:0;
+    z-index:1000;
+    background:white;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 8%;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#6d28d9;
+}
+
+.menu{
+    display:flex;
+    gap:25px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#333;
+    font-weight:600;
+    transition:.3s;
+}
+
+.menu a:hover{
+    color:#6d28d9;
+}
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:100px 20px;
+    background:linear-gradient(135deg,#6d28d9,#9333ea);
+    color:white;
+}
+
+.hero-content h1{
+    font-size:60px;
+    margin-bottom:20px;
+}
+
+.hero-content p{
+    font-size:22px;
+    max-width:800px;
+    margin:auto;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:30px;
+    padding:15px 35px;
+    background:white;
+    color:#6d28d9;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+section{
+    padding:90px 10%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:38px;
+    color:#6d28d9;
+    margin-bottom:50px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card i{
+    font-size:45px;
+    color:#6d28d9;
+    margin-bottom:20px;
+}
+
+.card h3{
+    margin-bottom:15px;
+}
+
+.about{
+    text-align:center;
+    max-width:1000px;
+    margin:auto;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.social{
+    text-align:center;
+}
+
+.social-icons{
+    margin-top:30px;
+}
+
+.social-icons a{
+    display:inline-flex;
+    width:60px;
+    height:60px;
+    justify-content:center;
+    align-items:center;
+    margin:10px;
+    border-radius:50%;
+    background:#6d28d9;
+    color:white;
+    font-size:25px;
+    transition:.3s;
+    text-decoration:none;
+}
+
+.social-icons a:hover{
+    transform:scale(1.1);
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:#111827;
+    color:white;
+}
+
+.whatsapp{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    width:70px;
+    height:70px;
+    background:#25D366;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:35px;
+    text-decoration:none;
+    box-shadow:0 4px 15px rgba(0,0,0,.3);
+}
+
+@media(max-width:768px){
+
+.menu{
+    gap:10px;
+    font-size:14px;
+}
+
+.hero-content h1{
+    font-size:40px;
+}
+
+.hero-content p{
+    font-size:18px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <div class="logo">Mishel</div>
+
+        <div class="menu">
+            <a href="#inicio">Inicio</a>
+            <a href="#sobre-mi">Sobre Mí</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#redes">Redes</a>
+            <a href="#contacto">Contacto</a>
         </div>
     </nav>
+</header>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="hero-gradient min-h-screen flex items-center pt-16">
-        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
-            <div class="text-white">
-                <h2 class="text-indigo-200 font-semibold tracking-widest uppercase mb-2">Consultoría Profesional</h2>
-                <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">Potenciando el Bienestar y la Felicidad Organizacional</h1>
-                <p class="text-lg mb-8 opacity-90">Transformo empresas creando experiencias memorables para los colaboradores y estrategias de beneficios que impulsan el talento.</p>
-                <div class="flex space-x-4">
-                    <a href="#servicios" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">Ver Servicios</a>
-                    <a href="https://wa.me/51998808598" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-indigo-600 transition">WhatsApp</a>
-                </div>
-            </div>
-            <div class="hidden md:block">
-                <!-- Aquí puedes poner tu foto -->
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600" alt="Mishel Profesional" class="rounded-2xl shadow-2xl">
-            </div>
+<section class="hero" id="inicio">
+    <div class="hero-content">
+        <h1>Mishel</h1>
+        <p>
+            Especialista en Bienestar Organizacional, Employee Experience,
+            Beneficios Corporativos, Felicidad Laboral y Gestión Humana.
+        </p>
+
+        <a href="https://wa.me/51998808598" class="btn">
+            Contáctame
+        </a>
+    </div>
+</section>
+
+<section id="sobre-mi">
+    <h2 class="section-title">Sobre Mí</h2>
+
+    <div class="about">
+        Soy profesional especializada en Employee Experience,
+        Bienestar Organizacional y Gestión Humana. Ayudo a las empresas
+        a construir culturas laborales saludables, fortalecer el compromiso
+        de los colaboradores y desarrollar programas de bienestar con alto impacto.
+    </div>
+</section>
+
+<section id="servicios">
+    <h2 class="section-title">Servicios</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <i class="fas fa-heart"></i>
+            <h3>Bienestar Laboral</h3>
+            <p>Diseño e implementación de programas integrales de bienestar.</p>
         </div>
-    </section>
 
-    <!-- Servicios -->
-    <section id="servicios" class="py-20 bg-white">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Mis Servicios</h2>
-            <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Soluciones integrales para el corazón de tu empresa: las personas.</p>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Bienestar -->
-                <div class="service-card p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-heart text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Bienestar Integral</h3>
-                    <p class="text-gray-600 text-sm">Programas de salud física y mental diseñados para reducir el estrés y aumentar la vitalidad del equipo.</p>
-                </div>
-
-                <!-- Felicidad -->
-                <div class="service-card p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-smile text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Felicidad Laboral</h3>
-                    <p class="text-gray-600 text-sm">Implementación de metodologías para mejorar el clima organizacional y el compromiso genuino.</p>
-                </div>
-
-                <!-- Beneficios -->
-                <div class="service-card p-8 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-gift text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Plan de Beneficios</h3>
-                    <p class="text-gray-600 text-sm">Diseño de beneficios a la medida (salario emocional) que atraen y retienen al mejor talento.</p>
-                </div>
-            </div>
+        <div class="card">
+            <i class="fas fa-smile"></i>
+            <h3>Felicidad Organizacional</h3>
+            <p>Acciones enfocadas en clima laboral y experiencia positiva.</p>
         </div>
-    </section>
 
-    <!-- Employee Experience Section -->
-    <section id="experiencia" class="py-20 bg-indigo-900 text-white">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8">Employee Experience (EX)</h2>
-            <p class="text-xl opacity-90 leading-relaxed mb-10">
-                "No solo diseño procesos, diseño momentos que importan. Desde el onboarding hasta el offboarding, cada punto de contacto es una oportunidad para fortalecer el vínculo entre el colaborador y la marca."
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <span class="bg-indigo-700 px-4 py-2 rounded-lg text-sm">Journey Mapping</span>
-                <span class="bg-indigo-700 px-4 py-2 rounded-lg text-sm">Cultura Corporativa</span>
-                <span class="bg-indigo-700 px-4 py-2 rounded-lg text-sm">Feedback 360</span>
-                <span class="bg-indigo-700 px-4 py-2 rounded-lg text-sm">Engagement</span>
-            </div>
+        <div class="card">
+            <i class="fas fa-users"></i>
+            <h3>Employee Experience</h3>
+            <p>Diseño de experiencias memorables para el colaborador.</p>
         </div>
-    </section>
 
-    <!-- Footer & Contacto -->
-    <footer id="contacto" class="bg-gray-900 text-white py-12">
-        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-            <div>
-                <h3 class="text-2xl font-bold mb-4">Mishel</h3>
-                <p class="text-gray-400">Especialista en potenciar el capital humano a través del bienestar y la experiencia.</p>
-            </div>
-            <div>
-                <h4 class="text-lg font-semibold mb-4">Enlaces</h4>
-                <ul class="space-y-2 text-gray-400">
-                    <li><a href="#inicio" class="hover:text-white">Inicio</a></li>
-                    <li><a href="#servicios" class="hover:text-white">Servicios</a></li>
-                    <li><a href="https://wa.me/51998808598" class="hover:text-white">Contacto</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-lg font-semibold mb-4">Redes Sociales</h4>
-                <div class="flex space-x-4 text-2xl">
-                    <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-pink-500"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-twitter"></i></a>
-                    <a href="https://wa.me/51998808598" class="text-gray-400 hover:text-green-500"><i class="fab fa-whatsapp"></i></a>
-                </div>
-                <p class="mt-6 text-gray-400">Telf: +51 998 808 598</p>
-            </div>
+        <div class="card">
+            <i class="fas fa-gift"></i>
+            <h3>Beneficios Corporativos</h3>
+            <p>Optimización y gestión estratégica de beneficios.</p>
         </div>
-        <div class="text-center mt-12 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-            &copy; 2023 Mishel. Todos los derechos reservados.
+
+        <div class="card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Engagement</h3>
+            <p>Programas de compromiso y retención de talento.</p>
         </div>
-    </footer>
 
-    <!-- WhatsApp Flotante -->
-    <a href="https://wa.me/51998808598" class="float-whatsapp flex items-center transition hover:scale-105" target="_blank">
-        <i class="fab fa-whatsapp text-2xl mr-2"></i>
-        <span>¿Hablamos?</span>
-    </a>
+        <div class="card">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Consultoría RRHH</h3>
+            <p>Asesoría para proyectos de gestión humana y cultura.</p>
+        </div>
 
-    <!-- Script para menú interactivo -->
-    <script>
-        const btn = document.getElementById('mobile-menu-button');
-        const menu = document.getElementById('mobile-menu');
+    </div>
+</section>
 
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
+<section id="redes">
+    <h2 class="section-title">Sígueme</h2>
 
-        // Cerrar menú al hacer click en un enlace
-        const links = menu.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                menu.classList.add('hidden');
-            });
-        });
-    </script>
+    <div class="social">
+        <p>Conectemos a través de mis redes profesionales.</p>
+
+        <div class="social-icons">
+
+            <a href="#" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+
+            <a href="#" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+
+            <a href="#" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <a href="#" target="_blank">
+                <i class="fab fa-tiktok"></i>
+            </a>
+
+            <a href="mailto:correo@mishel.com">
+                <i class="fas fa-envelope"></i>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<section id="contacto">
+    <h2 class="section-title">Contacto</h2>
+
+    <div class="about">
+        ¿Buscas fortalecer la experiencia de tus colaboradores?
+        Estoy lista para ayudarte a construir organizaciones más humanas,
+        felices y sostenibles.
+        <br><br>
+        <strong>WhatsApp:</strong> 998 808 598
+    </div>
+</section>
+
+<footer>
+    © 2026 Mishel | Employee Experience & Bienestar Organizacional
+</footer>
+
+<a href="https://wa.me/51998808598" class="whatsapp" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
 </body>
 </html>
-
-Características destacadas de tu página:
-
-1.  Diseño Profesional (UX/UI): Utiliza una paleta de colores en tonos índigo,
-    violeta y blanco, lo que transmite confianza, modernidad y profesionalismo.
-2.  Secciones específicas:
-      - Hero Section: Un saludo impactante con botones de acción directa.
-      - Servicios en Tarjetas: Los servicios de Bienestar, Felicidad y
-        Beneficios se presentan en tarjetas limpias que reaccionan al pasar el
-        mouse.
-      - Sección de EX (Employee Experience): Un bloque oscuro elegante para
-        resaltar tu especialidad.
-3.  Interactividad:
-      - El menú es "Sticky" (se queda arriba al bajar).
-      - Tiene un menú móvil funcional (hamburguesa) que se despliega en
-        celulares.
-      - WhatsApp Flotante: Un botón siempre visible abajo a la derecha para que
-        te contacten rápidamente.
-4.  Redes Sociales: Iconos listos en el pie de página para conectar tus cuentas.
-5.  Adaptable (Responsive): Se ve perfecto tanto en computadoras como en
-    teléfonos móviles.
-
-Nota: He incluido el código de país +51 (Perú) en el enlace de WhatsApp
-basándome en el formato del número. Si es de otro país, solo cambia el 51 por
-el código correspondiente.
